@@ -1,0 +1,11 @@
+{
+  "name": "simple-login-example",
+  "version": "1.0.0",
+  "main": "index.html",
+  "repository": "git@github.com:tyronedougherty/simple-login-example.git",
+  "author": "Tyrone Dougherty <tyrone@kasada.io>",
+  "license": "MIT",
+  "scripts": {
+    "build": "echo ''"
+  }
+}
