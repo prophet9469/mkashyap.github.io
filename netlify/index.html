@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Login Example</title>
+</head>
+<body>
+<h1>Simple login</h1>
+<form id="login" method="post">
+    <label for="username">Username: </label><input type="text" name="username" id="username" />
+    <br />
+    <label for="password">Password: </label><input type="password" name="password" id="password" />
+    <br/>
+    <br/>
+    <button type="submit">Login</button>
+    <br/>
+    <br/>
+    <div id="login-success" style="background-color: lightgreen; padding: 20px; max-width: 200px; display:none;">
+        <h3>Login success!</h3>
+    </div>
+    <div id="login-failure-bad-credentials" style="background-color: lightcoral; padding: 20px; max-width: 200px;display:none">
+        <h3>Login failure! Wrong username or password</h3>
+    </div>
+    <div id="login-failure-general" style="background-color: lightcoral; padding: 20px; max-width: 200px;display:none">
+        <h3>Login failure! Unexpected error</h3>
+    </div>
+</form>
+<script type="application/javascript">
+    const loginSuccess = document.getElementById('login-success');
+    const loginFailureBadCredentials = document.getElementById('login-failure-bad-credentials');
+    const loginFailureGeneral = document.getElementById('login-failure-general');
+
+    function handleLogin(e) {
+        e.preventDefault();
+        loginSuccess.style.display = 'none';
+        loginFailureBadCredentials.style.display = 'none';
+        loginFailureGeneral.style.display = 'none';
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        fetch('/.netlify/functions/login', {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({username, password})
+        }).then((response) => {
+            if (response.status === 200) {
+                loginSuccess.style.display = 'block';
+            } else if (response.status === 401) {
+                loginFailureBadCredentials.style.display = 'block';
+            } else {
+                loginFailureGeneral.style.display = 'block';
+            }
+        }).catch(() => {
+            loginFailureGeneral.style.display = 'block';
+        });
+    }
+
+    document.getElementById('login').addEventListener('submit', handleLogin);
+</script>
+</body>
+</html>
